@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "433856540664",
+    "project_id": "fresh-farm-routes",
+    "storage_bucket": "fresh-farm-routes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:433856540664:android:8812bcb6dadaa43ca8f00d",
+        "android_client_info": {
+          "package_name": "com.example.freshfarmroutes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "433856540664-7hi7hrad7umjk38qpnuh4fg2e1298bjt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0zsFkzgaXYYu3Wh4jch5El93ARU1IbdA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "433856540664-7hi7hrad7umjk38qpnuh4fg2e1298bjt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
