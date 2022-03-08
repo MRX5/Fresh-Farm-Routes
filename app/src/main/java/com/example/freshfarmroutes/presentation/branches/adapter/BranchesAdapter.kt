@@ -11,8 +11,9 @@ import com.example.freshfarmroutes.R
 import com.example.freshfarmroutes.databinding.BranchLayoutBinding
 import com.example.freshfarmroutes.databinding.HyperLayoutBinding
 import com.example.freshfarmroutes.domain.model.Branch
+import com.example.freshfarmroutes.presentation.utils.OnButtonClickListener
 
-class BranchesAdapter : RecyclerView.Adapter<BranchesAdapter.BranchesViewHolder>(),Filterable{
+class BranchesAdapter(private val listener:OnButtonClickListener) : RecyclerView.Adapter<BranchesAdapter.BranchesViewHolder>(),Filterable{
 
     var branchesList: MutableList<Branch> = mutableListOf()
     var branchesFilterList= mutableListOf<Branch>()
@@ -43,8 +44,8 @@ class BranchesAdapter : RecyclerView.Adapter<BranchesAdapter.BranchesViewHolder>
     inner class BranchesViewHolder(private val binding: BranchLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(branch: Branch) = with(binding) {
            this.branch=branch
-            binding.goBtn.setOnClickListener {  }
-            binding.shareBtn.setOnClickListener {  }
+            binding.goBtn.setOnClickListener {  listener.onGoToLocationClick(branch.location_url)}
+            binding.shareBtn.setOnClickListener { listener.onShareBtnClick(branch.location_url) }
         }
     }
 
