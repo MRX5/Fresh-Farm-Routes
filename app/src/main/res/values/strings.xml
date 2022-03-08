@@ -10,6 +10,12 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="search">Search</string>
+    <string name="search">بحث</string>
     <string name="fresh_farm_routes">Fresh Farm Routes</string>
+    <string name="Home">الرئيسية</string>
+    <string name="branches">الفروع</string>
+    <string name="go_to_location">الذهاب</string>
+    <string name="share_location">مشاركة</string>
+
+
 </resources>

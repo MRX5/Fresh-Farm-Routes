@@ -1,55 +1,69 @@
 package com.example.freshfarmroutes.data.repository
 
 import android.util.Log
+import com.example.freshfarmroutes.data.utils.NetworkHelper
 import com.example.freshfarmroutes.domain.model.Branch
 import com.example.freshfarmroutes.domain.model.Hyper
 import com.example.freshfarmroutes.domain.repository.HyperRepository
 import com.example.freshfarmroutes.presentation.utils.State
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class HyperRepositoryImpl : HyperRepository {
+class HyperRepositoryImpl @Inject constructor(
+    private val fireStore: FirebaseFirestore,
+    private val networkHelper: NetworkHelper
+) : HyperRepository {
 
-    @ExperimentalCoroutinesApi
-    override suspend fun getBranches()= callbackFlow {
-        val db = Firebase.firestore
-        trySend(State.Loading)
-        db.collection("Branch")
-            .get()
-            .addOnSuccessListener { result ->
-                val branchesList = mutableListOf<Branch>()
-                for (branch in result) {
-                    branchesList.add(branch.toObject(Branch::class.java))
-                }
-                trySend(State.Success(branchesList))
-            }.addOnFailureListener {
-                trySend(State.Error(it.message.toString()))
+    override suspend fun getBranches(hyperId:String) = flow {
+        emit(State.Loading)
+        val response = fireStore.
+        collection("Hyper")
+            .document(hyperId)
+            .collection("Branches")
+            .get().await()
+        if (response.isEmpty) {
+            if (!networkHelper.isNetworkConnected()) {
+                emit(State.Error("لا يوجد اتصال بالأنترنت"))
+            } else {
+                emit(State.Error("لا توجد بيانات"))
             }
+        } else {
+            val branchesList = response.documents.mapNotNull {
+                it.toObject(Branch::class.java)
+            }
+            emit(State.Success(branchesList))
+        }
+    }.catch { error ->
+        error.message?.let {
+            emit(State.Error(it))
+        }
     }
 
-    @ExperimentalCoroutinesApi
-    override suspend fun getHyper() = callbackFlow {
-        val db = Firebase.firestore
-        trySend(State.Loading)
-        db.collection("Hyper")
-            .get()
-            .addOnSuccessListener { result ->
-                val hyperList = mutableListOf<Hyper>()
-                result.forEach { hyper ->
-                    hyperList.add(hyper.toObject(Hyper::class.java))
-                }
-
-                trySend(State.Success(hyperList))
+    override suspend fun getHyper() = flow {
+        emit(State.Loading)
+        val response = fireStore.collection("Hyper")
+            .get().await()
+        if (response.isEmpty) {
+            if (!networkHelper.isNetworkConnected()) {
+                emit(State.Error("لا يوجد اتصال بالأنترنت"))
+            } else {
+                emit(State.Error("لا توجد بيانات"))
             }
-            .addOnFailureListener {
-                trySend(State.Error(it.message.toString()))
+        } else {
+            val hyperList = response.documents.mapNotNull {
+                it.toObject(Hyper::class.java)
             }
-
-        awaitClose {
-            cancel()
+            emit(State.Success(hyperList))
+        }
+    }.catch { error ->
+        error.message?.let {
+            emit(State.Error(it))
         }
     }
 

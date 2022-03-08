@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class GetBranches @Inject constructor(private val repository: HyperRepository){
 
-    suspend operator fun invoke():Flow<State<List<Branch>>>{
-        return repository.getBranches()
+    suspend operator fun invoke(hyperId:String):Flow<State<List<Branch>>>{
+        return repository.getBranches(hyperId)
     }
 }

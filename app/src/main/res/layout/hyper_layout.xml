@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data class="HyperLayoutBinding">
-
         <variable
             name="hyper"
             type="com.example.freshfarmroutes.domain.model.Hyper" />

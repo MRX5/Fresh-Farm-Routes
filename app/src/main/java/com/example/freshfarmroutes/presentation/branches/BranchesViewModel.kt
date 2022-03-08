@@ -20,13 +20,9 @@ class BranchesViewModel @Inject constructor(
     private var _branchesStateFlow = MutableStateFlow<State<List<Branch>>>(State.Idle)
     val branchesStateFlow: MutableStateFlow<State<List<Branch>>> get() = _branchesStateFlow
 
-    init {
-        getBranches()
-    }
-
-    fun getBranches() {
+    fun getBranches(hyperId:String) {
         viewModelScope.launch {
-            getBranchesUseCase.invoke().onEach {
+            getBranchesUseCase.invoke(hyperId).onEach {
                 _branchesStateFlow.value=it
             }.launchIn(viewModelScope)
         }

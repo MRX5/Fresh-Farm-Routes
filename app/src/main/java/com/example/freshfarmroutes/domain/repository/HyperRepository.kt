@@ -6,6 +6,6 @@ import com.example.freshfarmroutes.presentation.utils.State
 import kotlinx.coroutines.flow.Flow
 
 interface HyperRepository {
-    suspend fun  getBranches():Flow<State<List<Branch>>>
+    suspend fun  getBranches(hyperId:String):Flow<State<List<Branch>>>
     suspend fun  getHyper():Flow<State<List<Hyper>>>
 }
