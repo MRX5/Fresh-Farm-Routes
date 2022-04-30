@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FreshFarm Routes</string>
+    <string name="app_name">Fresh Farm Routes</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -16,6 +16,9 @@
     <string name="branches">الفروع</string>
     <string name="go_to_location">الذهاب</string>
     <string name="share_location">مشاركة</string>
+    <string name="retry">إعادة المحاولة</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

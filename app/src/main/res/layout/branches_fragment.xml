@@ -42,9 +42,9 @@
         app:layout_constraintTop_toBottomOf="@+id/search_view" />
 
     <include
-        android:id="@+id/no_internet_layout"
+        android:id="@+id/error_layout"
         android:visibility="gone"
-        layout="@layout/no_internet_layout"/>
+        layout="@layout/error_layout"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

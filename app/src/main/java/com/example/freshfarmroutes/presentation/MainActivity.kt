@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity(),NavController.OnDestinationChangedListe
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.appBarMain.toolbar)
-
         setupNavigation()
     }
 
@@ -43,11 +42,6 @@ class MainActivity : AppCompatActivity(),NavController.OnDestinationChangedListe
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener(this)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
-        return true
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -65,7 +59,7 @@ class MainActivity : AppCompatActivity(),NavController.OnDestinationChangedListe
                 binding.appBarMain.toolbar.visibility= VISIBLE
             }
             R.id.nav_branches->{
-               // binding.appBarMain.toolbar.visibility= GONE
+               // binding.appBarMain.toolbar.visibility= VISIBLE
             }
         }
     }

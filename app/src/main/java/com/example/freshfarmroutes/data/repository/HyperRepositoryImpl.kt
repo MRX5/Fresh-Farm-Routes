@@ -5,6 +5,7 @@ import com.example.freshfarmroutes.data.utils.NetworkHelper
 import com.example.freshfarmroutes.domain.model.Branch
 import com.example.freshfarmroutes.domain.model.Hyper
 import com.example.freshfarmroutes.domain.repository.HyperRepository
+import com.example.freshfarmroutes.presentation.utils.ErrorType
 import com.example.freshfarmroutes.presentation.utils.State
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -29,9 +30,9 @@ class HyperRepositoryImpl @Inject constructor(
             .get().await()
         if (response.isEmpty) {
             if (!networkHelper.isNetworkConnected()) {
-                emit(State.Error("لا يوجد اتصال بالأنترنت"))
+                emit(State.Error(ErrorType.NoInternetConnection()))
             } else {
-                emit(State.Error("لا توجد بيانات"))
+                emit(State.Error(ErrorType.NoData()))
             }
         } else {
             val branchesList = response.documents.mapNotNull {
@@ -41,7 +42,7 @@ class HyperRepositoryImpl @Inject constructor(
         }
     }.catch { error ->
         error.message?.let {
-            emit(State.Error(it))
+            emit(State.Error(ErrorType.UnknownException(it)))
         }
     }
 
@@ -51,9 +52,9 @@ class HyperRepositoryImpl @Inject constructor(
             .get().await()
         if (response.isEmpty) {
             if (!networkHelper.isNetworkConnected()) {
-                emit(State.Error("لا يوجد اتصال بالأنترنت"))
+                emit(State.Error(ErrorType.NoInternetConnection()))
             } else {
-                emit(State.Error("لا توجد بيانات"))
+                emit(State.Error(ErrorType.NoData()))
             }
         } else {
             val hyperList = response.documents.mapNotNull {
@@ -63,7 +64,7 @@ class HyperRepositoryImpl @Inject constructor(
         }
     }.catch { error ->
         error.message?.let {
-            emit(State.Error(it))
+            emit(State.Error(ErrorType.UnknownException(it)))
         }
     }
 

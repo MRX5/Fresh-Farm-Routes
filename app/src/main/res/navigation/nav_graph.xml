@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
+    android:id="@+id/nav_navigation"
     app:startDestination="@+id/nav_home">
 
     <fragment
@@ -12,7 +12,11 @@
         tools:layout="@layout/home_fragment" >
         <action
             android:id="@+id/action_nav_home_to_nav_branches"
-            app:destination="@id/nav_branches" />
+            app:destination="@id/nav_branches"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/nav_branches"

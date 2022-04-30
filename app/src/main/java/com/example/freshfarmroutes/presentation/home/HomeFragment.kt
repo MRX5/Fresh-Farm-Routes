@@ -2,6 +2,7 @@ package com.example.freshfarmroutes.presentation.home
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,16 +21,14 @@ import com.example.freshfarmroutes.R
 import com.example.freshfarmroutes.databinding.HomeFragmentBinding
 import com.example.freshfarmroutes.domain.model.Hyper
 import com.example.freshfarmroutes.presentation.home.adapter.HyperAdapter
-import com.example.freshfarmroutes.presentation.utils.LinearSpacingItemDecoration
-import com.example.freshfarmroutes.presentation.utils.OnHyperClickListener
-import com.example.freshfarmroutes.presentation.utils.State
+import com.example.freshfarmroutes.presentation.utils.*
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(),OnHyperClickListener {
+class HomeFragment : Fragment(),OnHyperClickListener,OnRetryButtonClickListener {
     private lateinit var binding: HomeFragmentBinding
     private val viewModel: HomeViewModel by viewModels()
     private val hyperAdapter by lazy { HyperAdapter(this) }
@@ -39,6 +38,7 @@ class HomeFragment : Fragment(),OnHyperClickListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false)
+        binding.errorLayout.handler=this
         return binding.root
     }
 
@@ -63,6 +63,7 @@ class HomeFragment : Fragment(),OnHyperClickListener {
             viewModel.hyperStateFlow.collect {
                 when (it) {
                     is State.Loading -> {
+                        binding.errorLayout.root.visibility=GONE
                         binding.progressBar.visibility = VISIBLE
                     }
                     is State.Success -> {
@@ -71,26 +72,40 @@ class HomeFragment : Fragment(),OnHyperClickListener {
                     }
                     is State.Error -> {
                         binding.progressBar.visibility = GONE
-                        showSnackBar(it.exception)
+                        showError(it.errorType)
                     }
                 }
             }
         }
     }
 
-    private fun showSnackBar(Msg: String) {
-        Snackbar.make(binding.root, Msg, Snackbar.LENGTH_INDEFINITE).apply {
-            setAction("إعادة المحاولة") {
-                viewModel.getHyper()
-                dismiss()
+    private fun showError(errorType: ErrorType) {
+        when(errorType){
+            is ErrorType.NoInternetConnection->{
+                binding.errorLayout.errorImage.setImageResource(R.drawable.icon_no_internet)
+                binding.errorLayout.errorText.text=errorType.msg
+                binding.errorLayout.root.visibility= VISIBLE
             }
-            setActionTextColor(resources.getColor(R.color.yellow,null))
-            show()
+            is ErrorType.NoData->{
+                binding.errorLayout.errorImage.setImageResource(R.drawable.icon_empty)
+                binding.errorLayout.errorText.text=errorType.msg
+                binding.errorLayout.root.visibility= VISIBLE
+            }
+            is ErrorType.UnknownException->{
+                binding.errorLayout.errorImage.setImageResource(R.drawable.icon_empty)
+                binding.errorLayout.errorText.text="حدث خطأ"
+                binding.errorLayout.root.visibility= VISIBLE
+                Toast.makeText(context,errorType.exception,Toast.LENGTH_LONG).show()
+            }
         }
     }
 
     override fun onHyperClick(hyper: Hyper) {
         val directions=HomeFragmentDirections.actionNavHomeToNavBranches(hyper)
         findNavController().navigate(directions)
+    }
+
+    override fun onRetryBtnClick() {
+        viewModel.getHyper()
     }
 }
